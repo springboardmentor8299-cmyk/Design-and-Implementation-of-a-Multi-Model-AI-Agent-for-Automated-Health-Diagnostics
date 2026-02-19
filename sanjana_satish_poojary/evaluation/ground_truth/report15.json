@@ -1,0 +1,62 @@
+{
+    "Hemoglobin": {
+        "Value": 14.07,
+        "Status": "Normal"
+    },
+    "RBC": {
+        "Value": 4.91,
+        "Status": "Normal"
+    },
+    "WBC": {
+        "Value": 10969.75,
+        "Status": "Normal"
+    },
+    "Platelets": {
+        "Value": 182164.01,
+        "Status": "Normal"
+    },
+    "Glucose": {
+        "Value": 72.88,
+        "Status": "Normal"
+    },
+    "Cholesterol": {
+        "Value": 143.86,
+        "Status": "Normal"
+    },
+    "HDL": {
+        "Value": 45.0,
+        "Status": "Normal"
+    },
+    "LDL": {
+        "Value": 84.04,
+        "Status": "Normal"
+    },
+    "Triglycerides": {
+        "Value": 133.83,
+        "Status": "Normal"
+    },
+    "Total Bilirubin": {
+        "Value": 1.16,
+        "Status": "Normal"
+    },
+    "Direct Bilirubin": {
+        "Value": 0.09,
+        "Status": "Normal"
+    },
+    "SGOT": {
+        "Value": 16.53,
+        "Status": "Normal"
+    },
+    "SGPT": {
+        "Value": 14.25,
+        "Status": "Normal"
+    },
+    "Creatinine": {
+        "Value": 1.25,
+        "Status": "Normal"
+    },
+    "Urea": {
+        "Value": 17.26,
+        "Status": "Normal"
+    }
+}
