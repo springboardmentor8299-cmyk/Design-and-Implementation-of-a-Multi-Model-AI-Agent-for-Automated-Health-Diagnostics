@@ -1,1 +1,1 @@
-Health AI Project by Sanjana Satish Poojary
+Milestone 1 by Sanjana Satish Poojary
