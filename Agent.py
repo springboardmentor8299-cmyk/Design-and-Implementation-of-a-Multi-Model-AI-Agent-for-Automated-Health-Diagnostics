@@ -5,8 +5,8 @@ import json
 import google.generativeai as genai
 
 # --- CONFIGURATION ---
-# Replace with your actual Gemini API Key
-GEMINI_API_KEY = "AIzaSyByQi0cGPVEc3iEtv4FqktxWIy7YSRV3lw"
+import os
+GEMINI_API_KEY = "AIzaSyBKvRZRL7IghbOqDBQufK3YL6GwV2Pv_u4"
 
 # 1. Standard Reference Ranges (Hematology & Biochemistry)
 BLOOD_STANDARDS = {
@@ -92,7 +92,6 @@ st.set_page_config(page_title="Blood Lab AI", layout="wide")
 st.title("💉Blood Report Comparative Analysis")
 st.write("Upload your PDF report to compare your results against standard medical ranges.")
 st.divider()
-st.image("Agent.jpg")
 
 uploaded_file = st.file_uploader("Choose a Blood Report PDF", type="pdf")
 
