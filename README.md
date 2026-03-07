@@ -47,8 +47,10 @@ copy .env.example .env
 
 ### Option 1: Flask Web App
 ```bash
-python app.py
-```
+
+cd "Design-and-Implementation-of-a-Multi-Model-AI-Agent-for-Automated-Health-Diagnostics"
+python -m streamlit run Agent.py
+
 Visit http://localhost:5000
 
 ### Option 2: Streamlit App (with AI)
