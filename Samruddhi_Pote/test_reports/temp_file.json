@@ -1,0 +1,14 @@
+{
+  "Glucose": {
+    "value": 110,
+    "unit": "mg/dL"
+  },
+  "Hemoglobin": {
+    "value": 13.2,
+    "unit": "g/dL"
+  },
+  "HDL": {
+    "value": 38,
+    "unit": "mg/dL"
+  }
+}

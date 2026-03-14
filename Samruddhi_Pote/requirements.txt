@@ -1,0 +1,7 @@
+pdfplumber
+pytesseract
+opencv-python
+Pillow
+streamlit
+plotly
+pydantic

@@ -1,0 +1,37 @@
+{
+  "Hemoglobin": {
+    "unit": "g/dL",
+    "min": 12.0,
+    "max": 15.5
+  },
+  "Glucose": {
+    "unit": "mg/dL",
+    "min": 70,
+    "max": 99
+  },
+  "Total Cholesterol": {
+    "unit": "mg/dL",
+    "min": 125,
+    "max": 200
+  },
+  "LDL": {
+    "unit": "mg/dL",
+    "min": 0,
+    "max": 100
+  },
+  "HDL": {
+    "unit": "mg/dL",
+    "min": 40,
+    "max": 60
+  },
+  "Triglycerides": {
+    "unit": "mg/dL",
+    "min": 0,
+    "max": 150
+  },
+  "Creatinine": {
+    "unit": "mg/dL",
+    "min": 0.6,
+    "max": 1.3
+  }
+}
