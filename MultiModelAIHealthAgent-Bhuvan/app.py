@@ -50,10 +50,37 @@ if st.button("🔍 Analyze Report", type="primary", use_container_width=True):
                 status_color = "🟢" if info['status'] == 'normal' else "🔴"
                 st.markdown(f"{status_color} **{param.upper()}**: {info['value']} ({info['status']}) - *Reference: {info['reference']}*")
             
-            if result['findings']['risks'].get('risks'):
+            model2 = result['findings']['model2_output']
+            
+            if model2.get('patterns'):
+                st.subheader("🔍 Patterns Identified")
+                for pattern in model2['patterns']:
+                    st.info(f"**{pattern['name'].replace('_', ' ').title()}** - Confidence: {pattern['confidence']:.0%}")
+            
+            if model2.get('risks'):
                 st.subheader("⚠️ Risk Assessment")
-                for risk in result['findings']['risks']['risks']:
-                    st.warning(f"**{risk['type'].upper()}** - {risk['level']}: {risk['reason']}")
+                for risk in model2['risks']:
+                    risk_emoji = "🔴" if risk['level'] == 'high' else "🟡" if risk['level'] == 'moderate' else "🟢"
+                    st.warning(f"{risk_emoji} **{risk['type'].upper()}** Risk - Level: {risk['level']} | Score: {risk['score']}")
+                    st.write(f"Factors: {', '.join(risk['factors'])}")
+            
+            if model2.get('correlations'):
+                st.subheader("🔗 Parameter Correlations")
+                for corr in model2['correlations']:
+                    st.info(f"**{' & '.join(corr['parameters'])}**: {corr['implication'].replace('_', ' ').title()}")
+            
+            contextual = result['findings']['contextual']
+            if contextual.get('adjustments'):
+                st.subheader("👤 Contextual Analysis")
+                st.write(f"Age Group: {contextual.get('age_group', 'N/A').replace('_', ' ').title()}")
+                for adj in contextual['adjustments']:
+                    priority_color = "🔴" if adj['priority'] == 'high' else "🟡"
+                    st.write(f"{priority_color} {adj['message']}")
+                
+                if contextual.get('adjusted_risks'):
+                    st.write("**Risk Score Adjustments:**")
+                    for risk in contextual['adjusted_risks']:
+                        st.write(f"- {risk['type']}: {risk['original_score']} → {risk['adjusted_score']} (modifier: {risk['modifier']}x)")
             
             st.markdown("---")
             st.subheader("💡 Personalized Recommendations")
@@ -70,8 +97,8 @@ with st.sidebar:
     This AI system analyzes blood reports using three specialized models:
     
     - **Model 1**: Parameter interpretation
-    - **Model 2**: Pattern recognition & risk assessment
-    - **Model 3**: Contextual analysis
+    - **Model 2**: Pattern recognition, risk scoring & correlations
+    - **Model 3**: Contextual analysis with age/gender/family history
     
     Supported formats: PDF, Images, JSON
     """)

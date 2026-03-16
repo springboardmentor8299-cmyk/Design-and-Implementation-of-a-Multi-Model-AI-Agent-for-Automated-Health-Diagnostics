@@ -1,0 +1,160 @@
+{
+  "accuracy": 80.0,
+  "passed": 4,
+  "total": 5,
+  "results": [
+    {
+      "test_name": "Metabolic Syndrome",
+      "pattern_match": true,
+      "patterns_detected": [
+        "metabolic_syndrome",
+        "dyslipidemia",
+        "prediabetes"
+      ],
+      "risks": [
+        {
+          "type": "cardiovascular",
+          "score": 10,
+          "level": "high",
+          "factors": [
+            "TC/HDL ratio: 7.14",
+            "LDL/HDL ratio: 4.57",
+            "High total cholesterol",
+            "Low HDL",
+            "Age > 45"
+          ],
+          "percentage": 100
+        },
+        {
+          "type": "diabetes",
+          "score": 6,
+          "level": "high",
+          "factors": [
+            "Impaired fasting glucose: 110 mg/dL",
+            "Elevated triglycerides",
+            "Low HDL",
+            "Age > 45"
+          ],
+          "percentage": 90
+        }
+      ],
+      "contextual_adjustments": 4
+    },
+    {
+      "test_name": "High Cardiovascular Risk",
+      "pattern_match": true,
+      "patterns_detected": [
+        "metabolic_syndrome",
+        "dyslipidemia"
+      ],
+      "risks": [
+        {
+          "type": "cardiovascular",
+          "score": 13,
+          "level": "high",
+          "factors": [
+            "TC/HDL ratio: 9.33",
+            "LDL/HDL ratio: 6.00",
+            "High total cholesterol",
+            "High LDL",
+            "Low HDL",
+            "High triglycerides",
+            "Age > 45"
+          ],
+          "percentage": 100
+        },
+        {
+          "type": "diabetes",
+          "score": 3,
+          "level": "moderate",
+          "factors": [
+            "Elevated triglycerides",
+            "Low HDL",
+            "Age > 45"
+          ],
+          "percentage": 45
+        }
+      ],
+      "contextual_adjustments": 2
+    },
+    {
+      "test_name": "Diabetes Indicator",
+      "pattern_match": false,
+      "patterns_detected": [
+        "metabolic_syndrome",
+        "diabetes_indicator"
+      ],
+      "risks": [
+        {
+          "type": "cardiovascular",
+          "score": 3,
+          "level": "moderate",
+          "factors": [
+            "Low HDL",
+            "Age > 45"
+          ],
+          "percentage": 30
+        },
+        {
+          "type": "diabetes",
+          "score": 8,
+          "level": "high",
+          "factors": [
+            "Fasting glucose: 135 mg/dL",
+            "Elevated triglycerides",
+            "Low HDL",
+            "Age > 45"
+          ],
+          "percentage": 100
+        }
+      ],
+      "contextual_adjustments": 2
+    },
+    {
+      "test_name": "Kidney Dysfunction",
+      "pattern_match": true,
+      "patterns_detected": [
+        "prediabetes",
+        "kidney_dysfunction",
+        "anemia"
+      ],
+      "risks": [
+        {
+          "type": "cardiovascular",
+          "score": 1,
+          "level": "low",
+          "factors": [
+            "Age > 45"
+          ],
+          "percentage": 10
+        },
+        {
+          "type": "diabetes",
+          "score": 4,
+          "level": "moderate",
+          "factors": [
+            "Impaired fasting glucose: 105 mg/dL",
+            "Age > 45"
+          ],
+          "percentage": 60
+        },
+        {
+          "type": "kidney_disease",
+          "score": 3,
+          "level": "moderate",
+          "factors": [
+            "Elevated creatinine: 1.8 mg/dL"
+          ]
+        }
+      ],
+      "contextual_adjustments": 3
+    },
+    {
+      "test_name": "Normal Profile",
+      "pattern_match": true,
+      "patterns_detected": [],
+      "risks": [],
+      "contextual_adjustments": 0
+    }
+  ]
+}

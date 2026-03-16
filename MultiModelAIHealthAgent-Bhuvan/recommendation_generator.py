@@ -13,7 +13,7 @@ class RecommendationGenerator:
 {findings['summary']}
 
 Abnormal parameters: {findings['interpretations']}
-Risks: {findings['risks']}
+Risks: {findings.get('model2_output', {})}
 
 Provide 3-5 actionable recommendations covering diet, lifestyle, and follow-up actions."""
             
@@ -48,7 +48,8 @@ Provide 3-5 actionable recommendations covering diet, lifestyle, and follow-up a
                 elif param == 'creatinine':
                     recommendations.append("Stay hydrated and consult a nephrologist")
         
-        if findings['risks'].get('risks'):
+        model2_output = findings.get('model2_output', {})
+        if model2_output.get('risks'):
             recommendations.append("Schedule a follow-up with your healthcare provider")
         
         return '\n'.join(recommendations) if recommendations else "Maintain current healthy lifestyle"

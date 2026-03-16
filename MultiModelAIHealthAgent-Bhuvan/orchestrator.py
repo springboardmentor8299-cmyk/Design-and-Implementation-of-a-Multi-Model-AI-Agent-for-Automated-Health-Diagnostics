@@ -19,10 +19,10 @@ class MultiModelOrchestrator:
         validated_data = self.validator.validate(raw_data)
         
         interpretations = self.model1.analyze(validated_data, context)
-        risks = self.model2.analyze(validated_data, context)
-        contextual = self.model3.analyze(interpretations, risks, context)
+        model2_output = self.model2.analyze(validated_data, context)
+        contextual = self.model3.analyze(interpretations, model2_output, context)
         
-        findings = self.synthesizer.synthesize(interpretations, risks, contextual)
+        findings = self.synthesizer.synthesize(interpretations, model2_output, contextual)
         recommendations = self.recommender.generate(findings)
         
         return {

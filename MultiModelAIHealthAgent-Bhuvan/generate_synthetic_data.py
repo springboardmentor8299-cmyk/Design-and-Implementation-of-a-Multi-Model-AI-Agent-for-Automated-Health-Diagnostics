@@ -1,0 +1,113 @@
+import json
+import random
+
+def generate_synthetic_data():
+    """Generate synthetic test data representing known medical conditions"""
+    
+    synthetic_cases = [
+        {
+            'condition': 'Severe Metabolic Syndrome',
+            'data': {
+                'glucose': 115,
+                'triglycerides': 200,
+                'hdl': 32,
+                'cholesterol_total': 260,
+                'ldl': 170,
+                'hemoglobin': 14.0
+            },
+            'context': {'age': 58, 'gender': 'male', 'family_history': 'diabetes, cardiovascular disease'}
+        },
+        {
+            'condition': 'Type 2 Diabetes with Dyslipidemia',
+            'data': {
+                'glucose': 145,
+                'triglycerides': 250,
+                'hdl': 35,
+                'cholesterol_total': 280,
+                'ldl': 185,
+                'hemoglobin': 13.5
+            },
+            'context': {'age': 52, 'gender': 'female', 'family_history': 'diabetes'}
+        },
+        {
+            'condition': 'Chronic Kidney Disease',
+            'data': {
+                'creatinine': 2.1,
+                'hemoglobin': 10.5,
+                'glucose': 98,
+                'cholesterol_total': 210
+            },
+            'context': {'age': 68, 'gender': 'male', 'family_history': 'kidney disease'}
+        },
+        {
+            'condition': 'Familial Hypercholesterolemia',
+            'data': {
+                'cholesterol_total': 320,
+                'ldl': 240,
+                'hdl': 48,
+                'triglycerides': 140,
+                'glucose': 88
+            },
+            'context': {'age': 42, 'gender': 'male', 'family_history': 'heart disease, high cholesterol'}
+        },
+        {
+            'condition': 'Prediabetes with Low HDL',
+            'data': {
+                'glucose': 108,
+                'triglycerides': 165,
+                'hdl': 38,
+                'cholesterol_total': 215,
+                'ldl': 135
+            },
+            'context': {'age': 45, 'gender': 'male', 'family_history': 'diabetes'}
+        },
+        {
+            'condition': 'Anemia with Normal Metabolic Profile',
+            'data': {
+                'hemoglobin': 10.8,
+                'glucose': 92,
+                'cholesterol_total': 185,
+                'ldl': 98,
+                'hdl': 52,
+                'triglycerides': 125
+            },
+            'context': {'age': 35, 'gender': 'female', 'family_history': ''}
+        },
+        {
+            'condition': 'Optimal Health Profile',
+            'data': {
+                'glucose': 85,
+                'cholesterol_total': 170,
+                'ldl': 90,
+                'hdl': 60,
+                'triglycerides': 100,
+                'hemoglobin': 15.0,
+                'creatinine': 1.0
+            },
+            'context': {'age': 28, 'gender': 'male', 'family_history': ''}
+        },
+        {
+            'condition': 'High Cardiovascular Risk - Elderly',
+            'data': {
+                'cholesterol_total': 270,
+                'ldl': 175,
+                'hdl': 35,
+                'triglycerides': 210,
+                'glucose': 102,
+                'creatinine': 1.4
+            },
+            'context': {'age': 72, 'gender': 'male', 'family_history': 'heart disease, stroke'}
+        }
+    ]
+    
+    # Save to JSON
+    with open('synthetic_test_data.json', 'w') as f:
+        json.dump(synthetic_cases, f, indent=2)
+    
+    print(f"Generated {len(synthetic_cases)} synthetic test cases")
+    print("Saved to: synthetic_test_data.json")
+    
+    return synthetic_cases
+
+if __name__ == '__main__':
+    generate_synthetic_data()
