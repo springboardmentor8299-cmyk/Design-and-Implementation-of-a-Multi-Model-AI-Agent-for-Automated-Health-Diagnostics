@@ -1,73 +1,84 @@
-# Welcome to your Lovable project
+# Multi-Model AI Agent for Automated Health Diagnostics
 
-## Project info
+An AI-powered system for analyzing blood test reports and providing automated health diagnostics.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Features
 
-## How can I edit this code?
+- **PDF/Image Upload**: Supports PDF and image formats (PNG, JPG, JPEG)
+- **OCR Processing**: Extracts text from scanned documents using Tesseract
+- **Parameter Extraction**: Identifies and extracts blood test parameters
+- **AI Analysis**: Uses Google Gemini AI for intelligent data extraction
+- **Comparative Analysis**: Compares results against standard medical ranges
+- **Web Interface**: Two interfaces available (Flask and Streamlit)
 
-There are several ways of editing your application.
+## Project Structure
 
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+├── Agent.py                 # Streamlit app with Gemini AI integration
+├── app.py                   # Flask web application
+├── extractor.py             # Text extraction and parameter parsing
+├── model1.py                # Parameter interpretation module
+├── src/
+│   ├── data_extraction.py   # Data extraction engine
+│   └── data_validation.py   # Data validation module
+├── templates/
+│   └── index.html           # Flask HTML template
+└── requirements.txt         # Python dependencies
 ```
 
-**Edit a file directly in GitHub**
+## Installation
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+1. Install Python dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-**Use GitHub Codespaces**
+2. Install Tesseract OCR:
+   - Windows: Download from https://github.com/UB-Mannheim/tesseract/wiki
+   - Update the path in `extractor.py` and `app.py` if needed
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+3. Set up environment variables:
+```bash
+copy .env.example .env
+# Edit .env and add your Gemini API key
+```
 
-## What technologies are used for this project?
+## Usage
 
-This project is built with:
+### Option 1: Flask Web App
+```bash
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+cd "Design-and-Implementation-of-a-Multi-Model-AI-Agent-for-Automated-Health-Diagnostics"
+python -m streamlit run Agent.py
 
-## How can I deploy this project?
+Visit http://localhost:5000
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+### Option 2: Streamlit App (with AI)
+```bash
+streamlit run Agent.py
+```
 
-## Can I connect a custom domain to my Lovable project?
+### Option 3: Basic Streamlit App
+```bash
+cd Design-and-Implementation-of-a-Multi-Model-AI-Agent-for-Automated-Health-Diagnostics
+streamlit run app.py
+```
 
-Yes, you can!
+## Supported Blood Parameters
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- Hemoglobin
+- WBC Count
+- Platelet Count
+- Glucose (Fasting/Post-Prandial)
+- HbA1c
+- Cholesterol (Total, HDL, LDL)
+- Triglycerides
+- Liver Function (SGOT, SGPT, ALP, Bilirubin)
+- Kidney Function (Urea, Creatinine)
+- Thyroid (TSH, T3, T4)
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## Notes
+
+- This tool is for informational purposes only
+- Always consult a healthcare professional for medical advice
+- Ensure Tesseract OCR is properly installed for image processing
