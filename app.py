@@ -244,7 +244,7 @@ if uploaded_file:
                 response = requests.post(
                     "https://openrouter.ai/api/v1/chat/completions",
                     headers={
-                        "Authorization": "Bearer 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",
+                        "Authorization": "API-KEY",
                         "Content-Type": "application/json",
                         "HTTP-Referer": "http://localhost",
                         "X-Title": "Blood Report Analyzer"
