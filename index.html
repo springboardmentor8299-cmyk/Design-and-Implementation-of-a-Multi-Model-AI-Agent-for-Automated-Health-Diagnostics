@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Report Analyzer | Advanced Insights</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1; --primary-dark: #4f46e5; --secondary: #64748b;
+            --success: #10b981; --warning: #f59e0b; --danger: #ef4444;
+            --bg-main: #f8fafc; --card-bg: rgba(255, 255, 255, 0.9);
+        }
+        body { font-family: 'Inter', sans-serif; margin: 0; background-color: var(--bg-main); color: #1e293b; }
+        .bg-accent { position: fixed; top: 0; left: 0; right: 0; height: 300px; background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); z-index: -1; border-radius: 0 0 50px 50px; }
+        .main { padding: 40px 20px; max-width: 1200px; margin: auto; }
+        header { color: white; text-align: center; margin-bottom: 40px; }
+        .card { background: var(--card-bg); backdrop-filter: blur(10px); padding: 25px; border-radius: 20px; margin-bottom: 25px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); border: 1px solid rgba(255, 255, 255, 0.5); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 2fr; gap: 25px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        input, select, button { padding: 12px; border-radius: 10px; border: 1px solid #e2e8f0; width: 100%; box-sizing: border-box; }
+        button { background: var(--primary); color: white; border: none; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        button:hover { background: var(--primary-dark); }
+        table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+        td { padding: 15px; background: #fff; }
+        .badge { padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
+        .status-Normal { background: #dcfce7; color: var(--success); }
+        .status-Low { background: #fef3c7; color: var(--warning); }
+        .status-High { background: #fee2e2; color: var(--danger); }
+        #aiChatPanel { position: fixed; left: 30px; bottom: 30px; width: 350px; height: 380px; background: white; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); display: flex; flex-direction: column; overflow: hidden; z-index: 1000; }
+        #chatHeader { background: var(--primary); color: white; padding: 15px; font-weight: 700; }
+        #chatMessages { flex: 1; padding: 15px; overflow-y: auto; background: #f8fafc; font-size: 0.9rem; }
+        .msg { margin-bottom: 10px; padding: 10px; border-radius: 12px; max-width: 80%; }
+        .ai-msg { background: white; border: 1px solid #e2e8f0; }
+        .user-msg { background: var(--primary); color: white; margin-left: auto; }
+        #chatInputArea { padding: 10px; display: flex; gap: 5px; background: white; }
+    </style>
+</head>
+<body>
+<div class="bg-accent"></div>
+<div class="main" id="report">
+    <header>
+        <h1>Blood Report Analyzer</h1>
+        <p>Advanced Hematology Analysis & Health Insights</p>
+    </header>
+
+    <div class="grid-2">
+        <aside>
+            <div class="card">
+                <h3>Patient Context</h3>
+                <form method="POST" enctype="multipart/form-data">
+                    <label>Age</label>
+                    <input type="number" name="age" value="{{user_info.age}}" required>
+                    <label style="display:block; margin-top:10px;">Gender</label>
+                    <select name="gender">
+                        <option {% if user_info.gender == 'Male' %}selected{% endif %}>Male</option>
+                        <option {% if user_info.gender == 'Female' %}selected{% endif %}>Female</option>
+                    </select>
+                    <label style="display:block; margin-top:10px;">Upload Lab PDF</label>
+                    <input type="file" name="pdf" accept=".pdf" required>
+                    <button type="submit">Run AI Diagnosis</button>
+                </form>
+            </div>
+            <div class="card" style="text-align: center;">
+                <h3>Health Score</h3>
+                <canvas id="healthChart"></canvas>
+                <div id="scoreLabel" style="font-size: 2.5rem; font-weight: 700; color: var(--primary); margin-top:-30px;">--</div>
+            </div>
+        </aside>
+
+        <section>
+            {% if components %}
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3>Biomarker Analysis</h3>
+                    <button onclick="downloadPDF()" style="width: auto; padding: 8px 15px; background: var(--secondary);">Export PDF</button>
+                </div>
+                <table>
+                    <tbody>
+                        {% for c, v in components.items() %}
+                        <tr>
+                            <td><strong>{{c}}</strong></td>
+                            <td>{{v}}</td>
+                            <td><span class="badge status-{{statuses[c]}}">{{statuses[c]}}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>AI Medical Summary</h3>
+                <p>{{summary}}</p>
+            </div>
+
+            <div class="grid-3">
+                {% for r in risks %}
+                <div class="card" style="border-top: 4px solid var(--danger);">
+                    <p><strong>Risk Detected:</strong><br>{{r}}</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <h3 style="margin-top:30px">Personalized Action Plan</h3>
+            <div class="grid-3">
+                {% for rec in recommendations %}
+                <div class="card" style="border-top: 4px solid var(--success);">
+                    <p><strong>Recommended:</strong><br>{{rec}}</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="card" style="background: #fffbeb; border-left: 5px solid var(--warning);">
+                <p><strong>Success Rate:</strong> {{success_rate}}% | Disclaimer: Not a medical diagnosis.</p>
+            </div>
+            {% else %}
+            <div class="card" style="text-align: center; padding: 80px 20px;">
+                <div style="font-size: 4rem;">🔬</div>
+                <h2>Ready for Analysis</h2>
+                <p>Upload your report to see the AI breakdown.</p>
+            </div>
+            {% endif %}
+        </section>
+    </div>
+</div>
+
+<div id="aiChatPanel">
+    <div id="chatHeader">Vitalis AI Assistant</div>
+    <div id="chatMessages">
+        <div class="msg ai-msg">Hello! Ask me anything about your report results.</div>
+    </div>
+    <div id="chatInputArea">
+        <input id="chatInput" placeholder="Ask a question...">
+        <button onclick="sendMessage()" style="width:auto; margin-top:0">Send</button>
+    </div>
+</div>
+
+<script>
+    {% if components %}
+    const components = {{components|tojson}};
+    const statuses = {{statuses|tojson}};
+    let score = 100;
+    Object.values(statuses).forEach(s => { if(s !== "Normal") score -= 15; });
+    score = Math.max(score, 10);
+    document.getElementById('scoreLabel').innerText = score;
+
+    new Chart(document.getElementById("healthChart"), {
+        type: "doughnut",
+        data: {
+            datasets: [{
+                data: [score, 100 - score],
+                backgroundColor: [score > 70 ? "#10b981" : "#f59e0b", "#f1f5f9"],
+                circumference: 180, rotation: 270, borderWidth: 0, cutout: '80%'
+            }]
+        },
+        options: { plugins: { legend: { display: false } } }
+    });
+    {% endif %}
+
+    async function sendMessage() {
+        const input = document.getElementById("chatInput");
+        const text = input.value.trim();
+        if(!text) return;
+        
+        const msgDiv = document.getElementById("chatMessages");
+        msgDiv.innerHTML += `<div class="msg user-msg">${text}</div>`;
+        input.value = "";
+
+        const response = await fetch('/chat', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({message: text})
+        });
+        const data = await response.json();
+        msgDiv.innerHTML += `<div class="msg ai-msg">${data.reply}</div>`;
+        msgDiv.scrollTop = msgDiv.scrollHeight;
+    }
+
+    function downloadPDF() {
+        const element = document.getElementById("report");
+        html2pdf().from(element).save('My_Health_Report.pdf');
+    }
+</script>
+</body>
+</html>
