@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<style>
+
+/* 🌈 BACKGROUND */
+body{
+margin:0;
+font-family:'Segoe UI',sans-serif;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#1e3a8a,#2563eb,#38bdf8);
+background-size:300% 300%;
+animation:bgMove 8s infinite alternate;
+}
+
+/* 🌟 GLASS EFFECT */
+.login-box{
+background:rgba(255,255,255,0.15);
+backdrop-filter:blur(15px);
+padding:35px;
+border-radius:20px;
+width:340px;
+box-shadow:0 10px 40px rgba(0,0,0,0.3);
+text-align:center;
+color:white;
+animation:fadeIn 1s ease;
+}
+
+/* TITLE */
+.login-box h2{
+margin-bottom:20px;
+font-weight:600;
+}
+
+/* INPUTS */
+.login-box input{
+width:100%;
+padding:12px;
+margin:12px 0;
+border-radius:10px;
+border:none;
+outline:none;
+background:rgba(255,255,255,0.2);
+color:white;
+font-size:14px;
+}
+
+/* PLACEHOLDER */
+.login-box input::placeholder{
+color:#e5e7eb;
+}
+
+/* BUTTON */
+.login-box button{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:10px;
+background:white;
+color:#2563eb;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+}
+
+.login-box button:hover{
+transform:scale(1.05);
+background:#e0f2fe;
+}
+
+/* LINK */
+.link{
+margin-top:15px;
+font-size:14px;
+}
+
+.link a{
+color:#93c5fd;
+text-decoration:none;
+}
+
+/* ANIMATIONS */
+@keyframes bgMove{
+0%{background-position:left;}
+100%{background-position:right;}
+}
+
+@keyframes fadeIn{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="login-box">
+
+<h2>🔐 Welcome Back</h2>
+
+<form method="POST">
+
+<input type="text" name="username" placeholder="👤 Username" required>
+
+<input type="password" name="password" placeholder="🔒 Password" required>
+
+<button type="submit">Login 🚀</button>
+
+</form>
+
+<p class="link">
+Don't have an account?
+<a href="/register">Register</a>
+</p>
+
+</div>
+
+</body>
+</html>

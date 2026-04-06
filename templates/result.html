@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Health Dashboard</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<style>
+
+/* 🌈 BACKGROUND */
+body{
+margin:0;
+font-family:'Segoe UI';
+background:linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
+color:white;
+}
+
+/* HEADER */
+header{
+display:flex;
+justify-content:space-between;
+padding:15px 30px;
+background:rgba(255,255,255,0.1);
+backdrop-filter:blur(10px);
+}
+
+/* DASHBOARD */
+.dashboard{
+padding:30px;
+}
+
+/* TOP BAR */
+.top-bar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.badge{
+background:#38bdf8;
+padding:5px 10px;
+border-radius:20px;
+}
+
+/* CARD (GLASS) */
+.card{
+background:rgba(255,255,255,0.1);
+backdrop-filter:blur(12px);
+border-radius:15px;
+padding:20px;
+margin:20px 0;
+box-shadow:0 8px 25px rgba(0,0,0,0.3);
+}
+
+/* USER DETAILS */
+.user-details{
+color:white;
+}
+
+/* SCORE */
+.score{
+font-size:40px;
+}
+
+/* TABLE */
+table{
+width:100%;
+border-collapse:collapse;
+background:white;
+color:black;
+border-radius:10px;
+overflow:hidden;
+}
+
+th{
+background:#2563eb;
+color:white;
+padding:10px;
+}
+
+td{
+padding:10px;
+border-bottom:1px solid #ddd;
+}
+
+/* STATUS COLORS */
+.low{color:#f59e0b;font-weight:bold;}
+.normal{color:#16a34a;font-weight:bold;}
+.high{color:#dc2626;font-weight:bold;}
+
+/* RISK BOX */
+.risk-container{
+display:flex;
+flex-wrap:wrap;
+gap:15px;
+}
+
+.risk-box{
+width:220px;
+padding:15px;
+border-radius:12px;
+text-align:center;
+color:white;
+}
+
+.risk-box.high{background:#dc2626;}
+.risk-box.medium{background:#f59e0b;}
+.risk-box.low{background:#16a34a;}
+
+.risk-percent{
+font-size:20px;
+font-weight:bold;
+}
+
+/* BULLETS */
+.bullet-list{
+text-align:left;
+line-height:1.8;
+}
+
+/* CHART */
+.chart{
+width:45%;
+border-radius:10px;
+margin:10px;
+}
+
+/* BUTTON */
+.back-btn{
+display:inline-block;
+margin-top:15px;
+padding:10px 20px;
+background:#38bdf8;
+color:black;
+border-radius:8px;
+text-decoration:none;
+}
+
+/* CHAT */
+.chat-box{
+background:rgba(255,255,255,0.1);
+padding:15px;
+border-radius:10px;
+}
+
+.chat-input{
+width:70%;
+padding:10px;
+border-radius:8px;
+border:none;
+}
+
+.chat-btn{
+padding:10px;
+background:#38bdf8;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+.chat-response{
+margin-top:10px;
+background:#e0f2fe;
+color:black;
+padding:10px;
+border-radius:8px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<h2>🧠 HEALTH AI DASHBOARD</h2>
+<a href="/logout" class="back-btn">Logout</a>
+</header>
+
+<section class="dashboard">
+
+<!-- TOP -->
+<div class="top-bar">
+<h1>Welcome, {{ patient_name }}</h1>
+<span class="badge">AI Powered</span>
+</div>
+
+<!-- PATIENT -->
+<div class="card user-details">
+<h2>👤 Patient Details</h2>
+<p>{{ patient_name }} | {{ age }} | {{ gender }}</p>
+</div>
+
+<!-- SCORE -->
+<div class="card">
+<h2>📊 Health Score</h2>
+<h1 class="score"
+style="color:
+{% if score > 80 %}#16a34a
+{% elif score > 50 %}#f59e0b
+{% else %}#dc2626
+{% endif %}
+">
+{{ score }}/100
+</h1>
+</div>
+
+<!-- PARAMETERS -->
+<div class="card">
+<h2>🧪 Blood Parameters</h2>
+
+{% if data %}
+<table>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Status</th>
+</tr>
+
+{% for p, val in data.items() %}
+<tr>
+<td>{{ p }}</td>
+<td>{{ val }}</td>
+<td>
+{% if "Hemoglobin" in p and val < 13 %}
+<span class="low">Low</span>
+{% elif "Glucose" in p and val > 140 %}
+<span class="high">High</span>
+{% elif "Cholesterol" in p and val > 200 %}
+<span class="high">High</span>
+{% else %}
+<span class="normal">Normal</span>
+{% endif %}
+</td>
+</tr>
+{% endfor %}
+</table>
+{% else %}
+<p>No data available</p>
+{% endif %}
+</div>
+
+<!-- RISKS -->
+<div class="card">
+<h2>⚠ Detected Risks</h2>
+
+<div class="risk-container">
+{% if risks %}
+{% for r in risks %}
+<div class="risk-box {{ r.severity|lower }}">
+<h4>{{ r.name }}</h4>
+<p>{{ r.reason }}</p>
+
+<p class="risk-percent">
+{% if r.severity == "High" %}80%
+{% elif r.severity == "Medium" %}50%
+{% else %}20%
+{% endif %}
+</p>
+
+</div>
+{% endfor %}
+{% else %}
+<p>No risks detected ✅</p>
+{% endif %}
+</div>
+
+</div>
+
+<!-- EXPLANATION -->
+<div class="card">
+<h2>📘 Explanation</h2>
+<ul class="bullet-list">
+{% for e in explanations %}
+<li>{{ e }}</li>
+{% endfor %}
+</ul>
+</div>
+
+<!-- RECOMMEND -->
+<div class="card">
+<h2>💡 Recommendations</h2>
+<ul class="bullet-list">
+{% for r in recommendations %}
+<li>{{ r }}</li>
+{% endfor %}
+</ul>
+</div>
+
+<!-- CHART -->
+<div class="card">
+<h2>📊 Health Charts</h2>
+<img src="{{ url_for('static', filename='chart1.png') }}" class="chart">
+<img src="{{ url_for('static', filename='chart2.png') }}" class="chart">
+
+<br>
+<a href="/download" class="back-btn">📥 Download Report</a>
+</div>
+
+<!-- CHAT -->
+<div class="card">
+<h2>🤖 AI Assistant</h2>
+
+<div class="chat-box">
+<input type="text" id="question" class="chat-input" placeholder="Ask something...">
+<button onclick="askAI()" class="chat-btn">Ask</button>
+
+<div id="answer" class="chat-response"></div>
+</div>
+
+</div>
+
+<a href="/" class="back-btn">⬅ Back</a>
+
+</section>
+
+<script>
+function askAI(){
+let question = document.getElementById("question").value;
+
+fetch("/chat", {
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({question:question})
+})
+.then(res=>res.json())
+.then(data=>{
+document.getElementById("answer").innerText=data.answer;
+});
+}
+</script>
+
+</body>
+</html>

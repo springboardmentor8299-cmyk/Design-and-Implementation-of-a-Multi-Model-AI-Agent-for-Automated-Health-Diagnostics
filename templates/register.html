@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Register</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+margin:0;
+font-family:'Segoe UI';
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#0f172a,#2563eb,#38bdf8);
+background-size:300% 300%;
+animation:bgMove 8s infinite alternate;
+}
+
+.box{
+background:rgba(255,255,255,0.15);
+backdrop-filter:blur(15px);
+padding:35px;
+border-radius:20px;
+width:340px;
+text-align:center;
+color:white;
+box-shadow:0 10px 40px rgba(0,0,0,0.3);
+}
+
+input{
+width:100%;
+padding:12px;
+margin:10px 0;
+border:none;
+border-radius:10px;
+background:rgba(255,255,255,0.2);
+color:white;
+}
+
+input::placeholder{color:#e5e7eb;}
+
+button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+background:white;
+color:#2563eb;
+font-weight:bold;
+cursor:pointer;
+}
+
+a{color:#93c5fd;}
+
+@keyframes bgMove{
+0%{background-position:left;}
+100%{background-position:right;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+<h2>📝 Create Account</h2>
+
+<form method="POST">
+<input type="text" name="username" placeholder="Username" required>
+<input type="password" name="password" placeholder="Password" required>
+<button type="submit">Register 🚀</button>
+</form>
+
+<p>Already have account? <a href="/login">Login</a></p>
+</div>
+
+</body>
+</html>
