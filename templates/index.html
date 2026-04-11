@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Health AI Analyzer | Medical Report Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root {
+    --teal-dark: #0d5c52;
+    --teal-darker: #0a4a42;
+    --teal-light: #14b8a6;
+    --teal-pale: rgba(20, 184, 166, 0.2);
+    --white: #ffffff;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-600: #64748b;
+    --gray-800: #1e293b;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: var(--gray-800);
+    line-height: 1.6;
+}
+
+/* HEADER / NAV */
+.nav-header {
+    background: var(--teal-dark);
+    padding: 16px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.nav-logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--white);
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    color: var(--white);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    opacity: 0.9;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    opacity: 1;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.nav-cta {
+    background: var(--teal-light);
+    color: var(--white);
+    padding: 10px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.nav-cta:hover {
+    background: #0d9488;
+    transform: translateY(-1px);
+}
+
+/* HERO SECTION */
+.hero {
+    background: linear-gradient(135deg, rgba(13, 92, 82, 0.95) 0%, rgba(10, 74, 66, 0.98) 100%),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><defs><pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="1" fill="%2314b8a6" opacity="0.2"/></pattern></defs><rect fill="url(%23g)" width="800" height="600"/></svg>');
+    padding: 80px 40px 100px;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--white);
+    margin: 0 0 16px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.2;
+}
+
+.hero p {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0 0 28px;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero .cta-btn {
+    background: var(--teal-light);
+    color: var(--white);
+    padding: 14px 36px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+}
+
+.hero .cta-btn:hover {
+    background: #0d9488;
+    transform: translateY(-2px);
+}
+
+/* UPLOAD BAR - Appointment style */
+.upload-bar {
+    background: var(--white);
+    padding: 32px 40px;
+    margin: -40px 24px 0;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.upload-bar form {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+    flex-wrap: wrap;
+}
+
+.upload-bar .file-wrapper {
+    flex: 1;
+    min-width: 200px;
+}
+
+.upload-bar input[type="file"] {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid var(--gray-100);
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    background: var(--gray-50);
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.upload-bar input[type="file"]:hover {
+    border-color: var(--teal-light);
+}
+
+.upload-bar input[type="file"]::file-selector-button {
+    padding: 8px 16px;
+    margin-right: 12px;
+    background: var(--teal-dark);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 500;
+}
+
+.upload-bar button[type="submit"] {
+    background: var(--white);
+    color: var(--teal-dark);
+    border: 2px solid var(--teal-light);
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.upload-bar button[type="submit"]:hover {
+    background: var(--teal-light);
+    color: var(--white);
+}
+
+/* MAIN CONTAINER */
+.container {
+    max-width: 1000px;
+    margin: 48px auto 64px;
+    padding: 0 24px;
+}
+
+/* WHITE CARD */
+.card {
+    background: var(--white);
+    padding: 36px 40px;
+    border-radius: 16px;
+    margin-bottom: 28px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--gray-100);
+    animation: fadeIn 0.5s ease;
+}
+
+/* DARK TEAL SECTION - Services style */
+.section-teal {
+    background: linear-gradient(135deg, var(--teal-dark) 0%, var(--teal-darker) 100%);
+    padding: 40px 48px;
+    margin-bottom: 28px;
+    border-radius: 16px;
+    color: var(--white);
+}
+
+.section-teal h2 {
+    margin: 0 0 20px;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.section-teal p,
+.section-teal ul {
+    margin: 0;
+    opacity: 0.95;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card h2,
+.section-teal h2 {
+    color: var(--teal-dark);
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--gray-100);
+}
+
+.section-teal h2 {
+    color: var(--white);
+    border-bottom-color: rgba(255, 255, 255, 0.2);
+}
+
+/* TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+}
+
+th {
+    background: var(--teal-dark);
+    color: var(--white);
+    padding: 14px 18px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-radius: 12px 12px 0 0;
+}
+
+td {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+tbody tr {
+    transition: background 0.2s;
+}
+
+tbody tr:hover {
+    background: var(--teal-pale);
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Table in teal section */
+.section-teal table th {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.section-teal table td {
+    border-bottom-color: rgba(255, 255, 255, 0.15);
+}
+
+.section-teal table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* STATUS BADGES */
+.badge {
+    padding: 6px 14px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--white);
+}
+
+.high { background: #dc2626; }
+.low { background: #d97706; }
+.normal { background: var(--teal-light); }
+
+/* LIST STYLING */
+.card ul,
+.section-teal ul {
+    padding-left: 24px;
+}
+
+.card ul li,
+.section-teal ul li {
+    margin-bottom: 12px;
+}
+
+.card ul li::marker,
+.section-teal ul li::marker {
+    color: var(--teal-light);
+}
+
+/* HEALTH OVERVIEW DASHBOARD */
+.health-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.health-gauge-card {
+    background: linear-gradient(135deg, var(--teal-dark) 0%, var(--teal-darker) 100%);
+    border-radius: 16px;
+    padding: 32px;
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.health-gauge-card h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    opacity: 0.95;
+}
+
+.gauge-circle {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: conic-gradient(
+        var(--teal-light) 0deg calc(var(--score, 0) * 3.6deg),
+        rgba(255, 255, 255, 0.2) calc(var(--score, 0) * 3.6deg) 360deg
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gauge-inner {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: var(--teal-darker);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.gauge-value {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.gauge-label {
+    font-size: 0.75rem;
+    opacity: 0.9;
+}
+
+.stat-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.stat-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--gray-100);
+}
+
+.stat-card.normal { border-left: 4px solid var(--teal-light); }
+.stat-card.high { border-left: 4px solid #dc2626; }
+.stat-card.low { border-left: 4px solid #d97706; }
+
+.stat-card .number {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--gray-800);
+}
+
+.stat-card .label {
+    font-size: 0.85rem;
+    color: var(--gray-600);
+    margin-top: 4px;
+}
+
+.chart-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--gray-100);
+}
+
+.chart-card h3 {
+    margin: 0 0 20px;
+    font-size: 1.1rem;
+    color: var(--teal-dark);
+}
+
+.chart-container {
+    position: relative;
+    height: 180px;
+}
+
+/* PARAMETER BARS */
+.param-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.param-bar-item {
+    display: grid;
+    grid-template-columns: 180px 1fr 80px;
+    align-items: center;
+    gap: 16px;
+}
+
+.param-bar-item .param-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--gray-800);
+}
+
+.param-bar-item .param-value {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--teal-dark);
+    text-align: right;
+}
+
+.param-bar-track {
+    height: 12px;
+    background: var(--gray-100);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.param-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.6s ease;
+}
+
+.param-bar-fill.normal { background: var(--teal-light); }
+.param-bar-fill.high { background: #dc2626; }
+.param-bar-fill.low { background: #d97706; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .nav-header {
+        padding: 16px 20px;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .hero {
+        padding: 60px 20px 80px;
+    }
+
+    .hero h1 {
+        font-size: 1.75rem;
+    }
+
+    .upload-bar {
+        margin: -32px 16px 0;
+        padding: 24px;
+    }
+
+    .upload-bar form {
+        flex-direction: column;
+    }
+
+    .upload-bar .file-wrapper {
+        width: 100%;
+    }
+
+    .stat-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .param-bar-item {
+        grid-template-columns: 1fr 80px;
+        gap: 8px;
+    }
+
+    .param-bar-item .param-name {
+        grid-column: 1 / -1;
+    }
+
+    .health-overview {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+<body>
+
+<header class="nav-header">
+    <a href="/" class="nav-logo">Health AI</a>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="/" class="active">Home</a></li>
+            <li><a href="#upload">Upload</a></li>
+            <li><a href="#results">Results</a></li>
+        </ul>
+    </nav>
+    <a href="#upload" class="nav-cta">Analyze Report</a>
+</header>
+
+<section class="hero">
+    <h1>A Great Place to Care for Your Health</h1>
+    <p>AI-powered medical report analysis to help you understand your lab results and discover insights for healthier living.</p>
+    <a href="#upload" class="cta-btn">Upload Report</a>
+</section>
+
+<div class="upload-bar" id="upload">
+    <form method="POST" enctype="multipart/form-data">
+
+        <div class="file-wrapper">
+            <input type="file" name="file" required accept=".pdf,.txt,.jpg,.jpeg,.png">
+        </div>
+
+        <!-- ⭐ NEW: CONTEXT INPUTS -->
+        <input type="number" name="age" placeholder="Enter Age"
+        style="padding:12px; border-radius:10px; border:1px solid #ccc;">
+
+        <select name="gender"
+        style="padding:12px; border-radius:10px; border:1px solid #ccc;">
+            <option value="">Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
+
+        <button type="submit">Analyze Report</button>
+
+    </form>
+</div>
+
+<main class="container" id="results">
+
+{% if health_stats %}
+<section class="health-overview">
+    <div class="health-gauge-card" style="--score: {{ health_stats.score }};">
+        <h3>Overall Health Score</h3>
+        <div class="gauge-circle">
+            <div class="gauge-inner">
+                <span class="gauge-value">{{ health_stats.score }}%</span>
+                <span class="gauge-label">In Range</span>
+            </div>
+        </div>
+        <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;">{{ health_stats.normal }} of {{ health_stats.total }} parameters within normal range</p>
+    </div>
+    <div class="chart-card">
+        <h3>Status Distribution</h3>
+        <div class="chart-container">
+            <canvas id="statusChart"></canvas>
+        </div>
+    </div>
+    <div class="chart-card">
+        <h3>Quick Stats</h3>
+        <div class="stat-cards">
+            <div class="stat-card normal">
+                <div class="number">{{ health_stats.normal }}</div>
+                <div class="label">Normal</div>
+            </div>
+            <div class="stat-card high">
+                <div class="number">{{ health_stats.high }}</div>
+                <div class="label">Above Range</div>
+            </div>
+            <div class="stat-card low">
+                <div class="number">{{ health_stats.low }}</div>
+                <div class="label">Below Range</div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if extracted %}
+<div class="card">
+    <h2>Extracted Parameters</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Value</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for k,v in extracted.items() %}
+        {% if v %}
+        <tr>
+            <td>{{k}}</td>
+            <td>{{v}}</td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+{% if analysis %}
+<div class="card">
+    <h2>Parameter Levels at a Glance</h2>
+    <div class="param-bars">
+        {% for name, v in analysis.items() %}
+        {% set rng = v.range.split('-') %}
+        {% set low = rng[0]|float %}
+        {% set high = rng[1]|float %}
+        {% set span = high - low %}
+        {% set pct = 0 %}
+
+        {% if v.value < low %}
+            {% set pct = (v.value / low) * 50 %}
+
+        {% elif v.value > high %}
+            {% set pct = 100 + ((v.value - high) / span) * 50 %}
+
+        {% else %}
+            {% set pct = ((v.value - low) / span) * 100 %}
+        {% endif %}
+
+        {% set pct = [pct, 5]|max %}
+        {% set pct = [pct, 120]|min %}
+        <div class="param-bar-item">
+            <span class="param-name">{{ name|replace('_', ' ')|title }}</span>
+            <div class="param-bar-track">
+                <div class="param-bar-fill {{ v.status|lower }}" style="width: {{ pct }}%;"></div>
+            </div>
+            <span class="param-value">{{ v.value }} <small style="color:var(--gray-600);font-weight:400;">{{ v.range }}</small></span>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="card">
+    <h2>Medical Analysis</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Value</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for k,v in analysis.items() %}
+        <tr>
+            <td>{{k}}</td>
+            <td>{{v.value}}</td>
+            <td>
+                <span class="badge {% if v.status=='HIGH' %}high{% elif v.status=='LOW' %}low{% else %}normal{% endif %}">
+                    {{v.status}}
+                </span>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+{% if risks %}
+<div class="section-teal">
+    <h2>Health Risk Assessment</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Condition</th>
+            <th>Explanation</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for k,v in risks.items() %}
+        <tr>
+            <td>{{k}}</td>
+            <td>
+                {% if v.level %}
+                    <b>Level:</b> {{ v.level }} <br>
+                    <b>Score:</b> {{ v.score }} <br>
+                    <b>Reason:</b> {{ v.reason }}
+                {% else %}
+                    {{ v }}
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+{% if severity %}
+<div class="card">
+    <h2>⚠️ Risk Severity</h2>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Condition</th>
+            <th>Severity</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for k,v in severity.items() %}
+        <tr>
+            <td>{{k}}</td>
+            <td>
+                <span class="badge 
+                {% if v == 'HIGH' %}high
+                {% elif v == 'MEDIUM' %}low
+                {% else %}normal
+                {% endif %}">
+                    {{v}}
+                </span>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+{% if summary %}
+<div class="section-teal">
+    <h2>Report Summary</h2>
+    <ul>
+        {% for item in summary %}
+        <li>{{item}}</li>
+        {% endfor %}
+    </ul>
+    <a href="/download" style="
+        background-color:#14b8a6;
+        color:white;
+        padding:10px 20px;
+        border-radius:8px;
+        text-decoration:none;
+        font-weight:600;
+        display:inline-block;
+        margin-top:10px;
+    ">
+        ⬇ Download Report
+    </a>
+</div>
+{% endif %}
+
+{% if recommendations %}
+<div class="section-teal">
+    <h2>Health Recommendations</h2>
+    <ul>
+        {% for r in recommendations %}
+        <li>{{r}}</li>
+        {% endfor %}
+    </ul>
+    <br>
+    <a href="/download" target="_blank">
+        <button style="
+            background: white;
+            color: #0d5c52;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+        ">
+            📄 Download Full Report
+        </button>
+    </a>
+</div>
+{% endif %}
+
+<div class="card">
+    <h2>Ask AI Assistant 🤖</h2>
+
+    <form method="POST" style="display:flex; gap:10px; flex-wrap:wrap;">
+    
+    <!-- ⭐ ADD THIS LINE -->
+    <input type="hidden" name="chat" value="1">
+
+    <input type="text" name="question" placeholder="Ask something about your report..." required 
+    style="flex:1; padding:12px; border-radius:8px; border:1px solid #ccc;">
+    
+        <button type="submit" style="
+            background:#14b8a6;
+            color:white;
+            border:none;
+            padding:12px 20px;
+            border-radius:8px;
+            cursor:pointer;
+            font-weight:600;
+        ">
+            Ask
+        </button>
+    </form>
+    <div style="margin-top:10px;">
+        <button type="button" onclick="askQuestion('Why diabetes risk?')">Diabetes</button>
+        <button type="button" onclick="askQuestion('How to improve health?')">Improve Health</button>
+        <button type="button" onclick="askQuestion('What should I eat?')">Diet</button>
+    </div>
+    {% if chat_history %}
+    <div style="margin-top:20px;">
+        {% for sender, msg in chat_history %}
+            <p><b>{{ sender }}:</b> {{ msg }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+</main>
+
+{% if health_stats %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('statusChart');
+    if (ctx) {
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Normal', 'Above Range', 'Below Range'],
+                datasets: [{
+                    data: [{{ health_stats.normal }}, {{ health_stats.high }}, {{ health_stats.low }}],
+                    backgroundColor: ['#14b8a6', '#dc2626', '#d97706'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '65%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { padding: 16, usePointStyle: true }
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
+{% endif %}
+<script>
+function askQuestion(q) {
+    document.querySelector("input[name='question']").value = q;
+}
+</script>
+</body>
+</html> 

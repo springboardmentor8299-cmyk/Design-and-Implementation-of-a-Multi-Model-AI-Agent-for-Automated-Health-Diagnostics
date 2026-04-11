@@ -1,0 +1,20 @@
+Patient Name: Varsha S Panicker
+Age: 22
+Gender: Female
+
+Hemoglobin: 11.2 g/dL
+WBC Count: 8500 cells/mcL
+Platelet: 210000 /mcL
+
+Fasting Plasma Glucose: 140 mg/dL
+HbA1c: 6.8 %
+
+Total Cholesterol: 230 mg/dL
+HDL Cholesterol: 38 mg/dL
+LDL Cholesterol: 170 mg/dL
+Triglycerides: 210 mg/dL
+
+Creatinine: 1.1 mg/dL
+Urea: 28 mg/dL
+
+TSH: 5.2 mIU/L
