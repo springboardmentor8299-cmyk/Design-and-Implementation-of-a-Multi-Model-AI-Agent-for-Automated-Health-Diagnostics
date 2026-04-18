@@ -1,7 +1,12 @@
 .env
 venv/
 __pycache__/
-node_modules/
 uploads/
+outputs/
 *.pdf
-models/*.gguf
+*.png
+*.jpg
+frontend/.vite/
+node_modules/
+models/
+Design-and-Implementation-of-a-Multi-Model-AI-Agent-for-Automated-Health-Diagnostics/
